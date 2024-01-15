@@ -35,7 +35,7 @@ jobs:
           echo $start_sha
 
           tags=$(echo "$grabbed_changes" | grep -oE "WPD-[[:digit:]]{1,}" | sort | uniq | \
-            sed 's/^\|$/"/g' | paste -sd , | awk '{print "RELATED_JIRA_ISSUES="$0}'
+            sed 's/^\|$/"/g' | paste -sd , | awk '{print "RELATED_JIRA_ISSUES="$0}')
 
           echo $tags
         shell: bash
