@@ -12,3 +12,7 @@ Test Github workflows for automate release
 - test fix notes
 - test fix release change
 - test Pull Request
+
+## WPD-003
+
+- add Github workflow for checking Pull Requests titles
