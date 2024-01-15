@@ -33,12 +33,11 @@ jobs:
           echo Processed Commits:
           echo $grabbed_changes
           echo $start_sha
-          
-          echo "$grabbed_changes" | \
-            grep -oE "WPD-[[:digit:]]{1,}" | sort | uniq | \
-            sed 's/^\|$/"/g' | paste -sd , | awk '{print "RELATED_JIRA_ISSUES="$0}' >> $GITHUB_ENV
 
-          echo ${{env.RELATED_JIRA_ISSUES}}
+          tags=$(echo "$grabbed_changes" | grep -oE "WPD-[[:digit:]]{1,}" | sort | uniq | \
+            sed 's/^\|$/"/g' | paste -sd , | awk '{print "RELATED_JIRA_ISSUES="$0}'
+
+          echo $tags
         shell: bash
 
       - name: Conventional Changelog Action
