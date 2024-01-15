@@ -35,9 +35,10 @@ jobs:
           echo $start_sha
 
           tags=$(echo "$grabbed_changes" | grep -oE "WPD-[[:digit:]]{1,}" | sort | uniq | \
-            sed 's/^\|$/"/g' | paste -sd , | awk '{print "RELATED_JIRA_ISSUES="$0}')
+            sed 's/^\|$/"/g' | paste -sd ,)
 
           echo $tags
+          echo "RELATED_JIRA_ISSUES=$tags" >> "$GITHUB_ENV"
         shell: bash
 
       - name: Conventional Changelog Action
@@ -54,6 +55,7 @@ jobs:
       - name: Get Current Date
         run: |
           current_date=$(date +'%Y-%m-%d')
+          echo ${{env.RELATED_JIRA_ISSUES}}
           echo "CURRENT_DATE=$current_date" >> "$GITHUB_ENV"
 
       - name: Create Release
