@@ -31,6 +31,7 @@ jobs:
           
           echo Processed Commits:
           echo $(git rev-list --pretty=oneline $start_sha..HEAD)
+          echo $start_sha
           
           git log $start_sha..HEAD | \
             grep -oE "WPD-[[:digit:]]{1,}" | sort | uniq | \
