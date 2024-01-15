@@ -1,0 +1,59 @@
+# This workflow will enforce name on pull requests and branch names
+name: 'PR and Branch name enforcer'
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+    branches:
+      - 'master'
+      - 'demo'
+      - 'dev'
+
+jobs:
+  branch-naming-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Branch Name
+        shell: bash
+        run: |
+          # Определение имени ветки
+          branch_name=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+          
+          # Создание регулярного выражения для поиска JIRA ключа
+          regex=".*WPD-[0-9]+.*"
+          
+          # Вывод регулярного выражения для отладки
+          echo "Regex: $regex"
+          
+          # Вывод имени ветки для отладки
+          echo "Branch name: $branch_name"
+          
+          # Проверка, соответствует ли имя ветки шаблону
+          if [[ "$branch_name" =~ $regex ]]; then
+            echo "Branch name '$branch_name' is valid."
+          else
+            grep_exit_code=$?
+            if [ $grep_exit_code -eq 1 ]; then
+              echo "Branch name '$branch_name' does not match the required JIRA link pattern."
+              exit 1
+            else
+              echo "Error running regular expression check. Exit code: $grep_exit_code"
+              exit $grep_exit_code
+            fi
+          fi
+
+      - name: Check PR title
+        shell: bash
+        run: |
+          # Извлечение заголовка pull request'а
+          pr_title="${{ github.event.pull_request.title }}"
+          
+          # Создание регулярного выражения для поиска JIRA ключа
+          regex=".*WPD-[0-9]+.*"
+          
+          # Проверка, соответствует ли заголовок шаблону JIRA ключа
+          if [[ "$pr_title" =~ $regex ]]; then
+            echo "PR title '$pr_title' is valid."
+          else
+            echo "PR title '$pr_title' does not match the required JIRA link pattern."
+            exit 1
+          fi
