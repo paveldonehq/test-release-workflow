@@ -1,0 +1,44 @@
+name: Generate Version on Master Merge
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  generate-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+          fetch-depth: 0
+
+      - name: Conventional Changelog Action
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          tag-prefix: "opploans-"
+          skip-on-empty: false
+          skip-commit: true
+          create-summary: true
+          fallback-version: "opploans-0.1.0"
+
+      - name: Get Current Date
+        run: |
+          current_date=$(date +'%Y-%m-%d')
+          echo "CURRENT_DATE=$current_date" >> "$GITHUB_ENV"
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          name: '${{ steps.changelog.outputs.tag }} (${{ env.CURRENT_DATE }})'
+          tag: ${{ steps.changelog.outputs.tag }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}
+          generateReleaseNotes: true
