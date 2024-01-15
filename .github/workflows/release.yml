@@ -19,6 +19,25 @@ jobs:
         with:
           fetch-tags: true
           fetch-depth: 0
+      
+      - name: Collect issue numbers since last release/tag in master
+        continue-on-error: true
+        run: |
+          
+          export LC_ALL=en_US.utf8
+          
+          start_sha=$(git describe --abbrev=0 --tags main 2> /dev/null || \
+            git rev-list --max-parents=0 HEAD)
+          
+          echo Processed Commits:
+          echo $(git rev-list --pretty=oneline $start_sha..HEAD)
+          
+          git log $start_sha..HEAD | \
+            grep -oE "WPD-[[:digit:]]{1,}" | sort | uniq | \
+            sed 's/^\|$/"/g' | paste -sd , | awk '{print "RELATED_JIRA_ISSUES="$0}' >> $GITHUB_ENV
+
+          echo ${{env.RELATED_JIRA_ISSUES}}
+        shell: bash
 
       - name: Conventional Changelog Action
         id: changelog
