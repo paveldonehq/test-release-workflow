@@ -16,3 +16,7 @@ Test Github workflows for automate release
 ## WPD-003
 
 - add Github workflow for checking Pull Requests titles
+
+## WPD-004
+
+- test breaking changes
