@@ -29,12 +29,13 @@ jobs:
           start_sha=$(git describe --abbrev=0 --tags main 2> /dev/null || \
             git rev-list --max-parents=0 HEAD)
           grabbed_changes=$(git rev-list --pretty=oneline $start_sha..HEAD)
+          tags=$(echo "$grabbed_changes" | grep -oE "WPD-[[:digit:]]{1,}" | sort | uniq | sed 's/^\|$/"/g' | paste -sd ,)
           
           echo Processed Commits:
           echo $grabbed_changes
           echo $start_sha
-
-          git rev-list --pretty=oneline $start_sha..HEAD | grep -oE "WPD-[[:digit:]]{1,}" | sort | uniq | sed 's/^\|$/"/g' | paste -sd , | awk '{print "RELATED_JIRA_ISSUES="$0}' >> $GITHUB_ENV
+          echo $tags
+          echo "RELATED_JIRA_ISSUES=$tags" >> "$GITHUB_ENV"
         shell: bash
 
       - name: Conventional Changelog Action
