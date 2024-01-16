@@ -35,6 +35,7 @@ jobs:
           echo $grabbed_changes
           echo $start_sha
           echo $tags
+          
           echo "RELATED_JIRA_ISSUES=$tags" >> "$GITHUB_ENV"
         shell: bash
 
