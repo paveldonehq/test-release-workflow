@@ -35,6 +35,7 @@ jobs:
           echo $start_sha
 
           #Comment 1
+          #Comment 2
 
           echo "RELATED_JIRA_ISSUES=\"$(echo "$grabbed_changes" | grep -oE "WPD-[[:digit:]]{1,}" | sort | uniq | paste -sd ,)\"" >> $GITHUB_ENV
         shell: bash
