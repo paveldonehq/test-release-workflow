@@ -34,10 +34,7 @@ jobs:
           echo $grabbed_changes
           echo $start_sha
 
-          #Comment 1
-          #Comment 2
-
-          echo "RELATED_JIRA_ISSUES=\"$(echo "$grabbed_changes" | grep -oE "WPD-[[:digit:]]{1,}" | sort | uniq | paste -sd ,)\"" >> $GITHUB_ENV
+          git rev-list --pretty=oneline $start_sha..HEAD | grep -oE "WPD-[[:digit:]]{1,}" | sort | uniq | sed 's/^\|$/"/g' | paste -sd , | awk '{print "RELATED_JIRA_ISSUES="$0}' >> $GITHUB_ENV
         shell: bash
 
       - name: Conventional Changelog Action
