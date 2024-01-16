@@ -34,10 +34,7 @@ jobs:
           echo $grabbed_changes
           echo $start_sha
 
-          tags=$(echo "$grabbed_changes" | grep -oE "WPD-[[:digit:]]{1,}" | sort | uniq | \
-            sed 's/^\|$/"/g' | paste -sd , | awk '{print "RELATED_JIRA_ISSUES="$0}') >> $GITHUB_ENV
-
-          echo $tags
+          echo "RELATED_JIRA_ISSUES=\"$(echo "$commits" | grep -oE "WPD-[[:digit:]]{1,}" | sort | uniq | paste -sd ,)\"" >> $GITHUB_ENV
         shell: bash
 
       - name: Conventional Changelog Action
