@@ -24,3 +24,8 @@ Test Github workflows for automate release
 ## WPD-005
 
 - test pr workflow with bad branch name
+
+## WPD-006
+
+- add this
+- add that
