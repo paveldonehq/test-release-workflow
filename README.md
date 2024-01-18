@@ -5,7 +5,7 @@ Test Github workflows for automate release
 ## WPD-001
 
 - test feature notes
-- fixed
+- fixed!
 
 ## WPD-002
 
@@ -28,4 +28,5 @@ Test Github workflows for automate release
 ## WPD-006
 
 - add this
-- add that
+
+## WPD-007
